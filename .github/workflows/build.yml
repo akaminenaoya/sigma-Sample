@@ -33,7 +33,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.x'
 
 
       - name: CI Cache
@@ -54,7 +54,7 @@ jobs:
       - name: Zip artifact for upload
         run: cd out && zip ../out.zip . -r
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.get_branch.outputs.sha }}-${{ github.run_id }}
           path: out.zip
@@ -62,7 +62,7 @@ jobs:
       - name: Wait for Artifact download
         run: sleep 15
       - name: Webhook
-        uses: diverta/workflow-webhook@v2
+        uses: diverta/workflow-webhook@v3
         env:
           webhook_url: "https://sigma.g.kuroco.app/direct/menu/github/"
           webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
@@ -80,7 +80,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.x'
 
 
       - name: CI Cache
@@ -99,13 +99,13 @@ jobs:
       - name: Zip artifact for upload
         run: cd out && zip ../out.zip . -r
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ github.sha }}-${{ github.run_id }}
           path: out.zip
           retention-days: 7
       - name: Webhook
-        uses: diverta/workflow-webhook@v2
+        uses: diverta/workflow-webhook@v3
         env:
           webhook_url: "https://sigma.g.kuroco.app/direct/menu/github/"
           webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
