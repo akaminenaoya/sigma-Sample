@@ -7,9 +7,11 @@ on:
     types: [created, edited]
   workflow_dispatch:
 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 
 jobs:
   # for Pull Request (exclude merged)
@@ -33,6 +35,7 @@ jobs:
         with:
           node-version: '16.x'
 
+
       - name: CI Cache
         uses: actions/cache@v3
         id: node_modules_cache_id
@@ -41,6 +44,7 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ steps.get_branch.outputs.branch }}-${{ hashFiles('**/package-lock.json') }}
+
 
       - name: Install dependencies
         if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
@@ -64,6 +68,7 @@ jobs:
           webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
           data: '{"single_zip":"1","domain":"sigma.g.kuroco-front.app","pr":"${{ github.event.issue.pull_request.url }}",  "repository":"${{ github.repository }}", "run_id":"${{ github.run_id }}", "hash":"${{ steps.get_branch.outputs.sha }}"}'
 
+
   #for Push
   pushed_build:
     name: Build(pushed)
@@ -76,6 +81,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+
 
       - name: CI Cache
         uses: actions/cache@v3
@@ -101,6 +107,6 @@ jobs:
       - name: Webhook
         uses: diverta/workflow-webhook@v2
         env:
-        webhook_url: "https://sigma.g.kuroco.app/direct/menu/github/"
-        webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
-        data: '{"single_zip":"1","domain":"sigma.g.kuroco-front.app","pr":"${{ github.event.issue.pull_request.url }}",  "repository":"${{ github.repository }}", "run_id":"${{ github.run_id }}", "hash":"${{ github.sha }}"}'
+          webhook_url: "https://sigma.g.kuroco.app/direct/menu/github/"
+          webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
+          data: '{"single_zip":"1","domain":"sigma.g.kuroco-front.app","pr":"${{ github.event.issue.pull_request.url }}",  "repository":"${{ github.repository }}", "run_id":"${{ github.run_id }}", "hash":"${{ github.sha }}"}'
