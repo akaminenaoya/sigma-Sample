@@ -7,11 +7,9 @@ on:
     types: [created, edited]
   workflow_dispatch:
 
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 
 jobs:
   # for Pull Request (exclude merged)
@@ -27,24 +25,22 @@ jobs:
           echo "branch=$(echo $PR | jq -r '.ref')" >> $GITHUB_OUTPUT
           echo "sha=$(echo $PR | jq -r '.sha')" >> $GITHUB_OUTPUT
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ steps.get_branch.outputs.branch }}
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18.x'
 
-
       - name: CI Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: node_modules_cache_id
         env:
           cache-name: cache-node-modules
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ steps.get_branch.outputs.branch }}-${{ hashFiles('**/package-lock.json') }}
-
 
       - name: Install dependencies
         if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
@@ -54,7 +50,7 @@ jobs:
       - name: Zip artifact for upload
         run: cd out && zip ../out.zip . -r
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.get_branch.outputs.sha }}-${{ github.run_id }}
           path: out.zip
@@ -68,7 +64,6 @@ jobs:
           webhook_secret: "df2f6290e77d2361cf6953ebe2859a3f"
           data: '{"single_zip":"1","domain":"sigma.g.kuroco-front.app","pr":"${{ github.event.issue.pull_request.url }}",  "repository":"${{ github.repository }}", "run_id":"${{ github.run_id }}", "hash":"${{ steps.get_branch.outputs.sha }}"}'
 
-
   #for Push
   pushed_build:
     name: Build(pushed)
@@ -76,15 +71,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18.x'
 
-
       - name: CI Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: node_modules_cache_id
         env:
           cache-name: cache-node-modules
@@ -99,7 +93,7 @@ jobs:
       - name: Zip artifact for upload
         run: cd out && zip ../out.zip . -r
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.sha }}-${{ github.run_id }}
           path: out.zip
