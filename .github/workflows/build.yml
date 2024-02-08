@@ -48,7 +48,7 @@ jobs:
 
       - name: Install dependencies
         if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
-        run: npm ci --legacy-peer-deps --no-audit --progress=false --silent
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Zip artifact for upload
@@ -93,7 +93,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ env.BRANCH }}-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
-        run: npm ci --legacy-peer-deps --no-audit --progress=false --silent
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Zip artifact for upload
